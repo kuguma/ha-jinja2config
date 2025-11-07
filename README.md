@@ -59,7 +59,7 @@ With these settings, your templates would use the custom delimiters:
 
 ## Breaking Changes in v2.0.0
 
-Version 2.0.0 migrates from `jinja-cli` to `j2cli`, which provides better support for custom delimiters and configuration options. The core functionality remains the same, but the underlying CLI tool has changed.
+Version 2.0.0 migrates from `jinja-cli` to `jinjanator` (the modern successor to `j2cli`), which provides better support for custom delimiters and configuration options. The core functionality remains the same, but the underlying CLI tool has changed. Jinjanator supports Python 3.12+ and is actively maintained.
 
 ## Example
 

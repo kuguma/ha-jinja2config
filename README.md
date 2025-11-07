@@ -21,29 +21,13 @@ If you find this addon useful, please consider supporting the development of thi
 
 4. Find the ``jinja2config`` addon now the repository has been added and install it.
 
-## Configuration
+## Delimiters
 
-### Options
+This addon uses square bracket delimiters instead of the default curly braces to avoid conflicts with Home Assistant's templating system:
 
-- **config_dir**: The directory to watch for Jinja2 templates (default: `/config`)
-- **log_level**: Set the logging level (trace, debug, info, notice, warning, error, fatal)
-- **use_square_brackets**: Use square bracket delimiters `[[ ]]` instead of curly braces `{{ }}` (default: false)
-
-### Custom Delimiters
-
-If you need to use Jinja2 templates that conflict with other templating systems (like Home Assistant's own templating), you can enable the `use_square_brackets` option. This changes the Jinja2 delimiters as follows:
-
-- Variables: `{{ }}` → `[[ ]]`
-- Blocks: `{% %}` → `[% %]`
-- Comments: `{# #}` → `[# #]`
-
-Example configuration with custom delimiters enabled:
-
-```yaml
-config_dir: /config
-log_level: info
-use_square_brackets: true
-```
+- Variables: `[[ variable ]]` instead of `{{ variable }}`
+- Blocks: `[% for item in items %]` instead of `{% for item in items %}`
+- Comments: `[# comment #]` instead of `{# comment #}`
 
 ## Example
 
@@ -54,7 +38,7 @@ The following is a sample from my heating system, setting up the climate entitie
 Any changes to the template result in the yaml file being regenerated automatically. Any errors are written to an error file alongside the template.
 
 ```
-{% set rooms = [
+[% set rooms = [
     {
         "name": "Living Room",
         "id_prefix": "living_room",
@@ -69,9 +53,9 @@ Any changes to the template result in the yaml file being regenerated automatica
         "ki": 0.001,
         "kd": 1000
     }
-] %}
+] %]
 
-{% set presets = {
+[% set presets = {
     "min": 7,
     "max": 25,
     "away": 7,
@@ -79,28 +63,28 @@ Any changes to the template result in the yaml file being regenerated automatica
     "sleep": 17,
     "comfort": 19,
     "boost": 21
-} %}
+} %]
 
 climate:
-  {% for room in rooms %}
+  [% for room in rooms %]
   - platform: smart_thermostat
-    name: {{ room.name }} Smart Thermostat
-    unique_id: {{ room.id_prefix }}_smart_thermostat
-    heater: switch.{{ room.id_prefix }}_heating
-    target_sensor: sensor.{{ room.id_prefix }}_temperature
+    name: [[ room.name ]] Smart Thermostat
+    unique_id: [[ room.id_prefix ]]_smart_thermostat
+    heater: switch.[[ room.id_prefix ]]_heating
+    target_sensor: sensor.[[ room.id_prefix ]]_temperature
     ac_mode: False
-    kp: {{ room.kp }}
-    ki: {{ room.ki }}
-    kd: {{ room.kd }}
+    kp: [[ room.kp ]]
+    ki: [[ room.ki ]]
+    kd: [[ room.kd ]]
     keep_alive: 00:01:00
     pwm: 00:25:00
     min_cycle_duration: 00:5:00
-    {%- for preset in presets %}
-    {{ preset }}_temp: {{ presets[preset] }}
-    {%- endfor %}
-    target_temp: {{ presets["away"] }}
+    [%- for preset in presets %]
+    [[ preset ]]_temp: [[ presets[preset] ]]
+    [%- endfor %]
+    target_temp: [[ presets["away"] ]]
     debug: true
-  {% endfor %}
+  [% endfor %]
 ```
 
 ## Credits

@@ -1,7 +1,6 @@
 #!/command/with-contenv bashio
 HASS_CONFIG_DIR=$(bashio::config 'config_dir')
-USE_SQUARE_BRACKETS=$(bashio::config 'use_square_brackets')
-CUSTOMIZE_FILE=""
+CUSTOMIZE_FILE="/usr/bin/generate_jinja_customization.py"
 
 if ! type jinja > /dev/null 2>&1; then
   echo "jinja-cli must be installed: pip install jinja-cli (https://pypi.org/project/jinja-cli/)"
@@ -12,12 +11,6 @@ if ! type prettier > /dev/null 2>&1; then
   echo "Prettier must be installed: apt-get install nodejs npm && npm install -g prettier"
   sleep 1
   exit 1
-fi
-
-# Set up custom delimiters if enabled
-if [ "$USE_SQUARE_BRACKETS" = "true" ]; then
-  CUSTOMIZE_FILE="/usr/bin/generate_jinja_customization.py"
-  echo "Using square bracket delimiters: [[ ]] instead of {{ }}"
 fi
 
 remove() {
@@ -31,15 +24,8 @@ compile() {
   ERROR_LOG_FILE="$1$2.errors.log"
   OUTPUT_FILE="$1${2/.jinja}"
   echo "# DO NOT EDIT: Generated from: $2" > "$OUTPUT_FILE"
-
-  # Build jinja command with optional customization file
-  JINJA_CMD="jinja"
-  if [ -n "$CUSTOMIZE_FILE" ]; then
-    JINJA_CMD="jinja --customize $CUSTOMIZE_FILE"
-  fi
-
   # Log any errors to an .errors.log file, delete if successful
-  if $JINJA_CMD "$1$2" >> "$OUTPUT_FILE" 2> "$ERROR_LOG_FILE"; then
+  if jinja --customize "$CUSTOMIZE_FILE" "$1$2" >> "$OUTPUT_FILE" 2> "$ERROR_LOG_FILE"; then
     (rm -f "$ERROR_LOG_FILE" || true)
     echo "Formatting $OUTPUT_FILE with Prettier..."
     prettier --write "$OUTPUT_FILE" --log-level warn || true

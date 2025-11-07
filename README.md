@@ -21,6 +21,30 @@ If you find this addon useful, please consider supporting the development of thi
 
 4. Find the ``jinja2config`` addon now the repository has been added and install it.
 
+## Configuration
+
+### Options
+
+- **config_dir**: The directory to watch for Jinja2 templates (default: `/config`)
+- **log_level**: Set the logging level (trace, debug, info, notice, warning, error, fatal)
+- **use_square_brackets**: Use square bracket delimiters `[[ ]]` instead of curly braces `{{ }}` (default: false)
+
+### Custom Delimiters
+
+If you need to use Jinja2 templates that conflict with other templating systems (like Home Assistant's own templating), you can enable the `use_square_brackets` option. This changes the Jinja2 delimiters as follows:
+
+- Variables: `{{ }}` → `[[ ]]`
+- Blocks: `{% %}` → `[% %]`
+- Comments: `{# #}` → `[# #]`
+
+Example configuration with custom delimiters enabled:
+
+```yaml
+config_dir: /config
+log_level: info
+use_square_brackets: true
+```
+
 ## Example
 
 I set up smart thermostats to control the underfloor heating for multiple rooms, requiring a certain amount of similar config per room. Using a template the amount of hand written yaml is greatly reduced, making it easier to manage and change as needed.

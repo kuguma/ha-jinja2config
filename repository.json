@@ -1,5 +1,5 @@
 {
-    "name": "Jinja2Config",
-    "url": "https://github.com/tonyroberts/hassio-jinja2config",
-    "maintainer": "Tony Roberts <tony@tonyr.org>"
+    "name": "Jinja2Config-fork-kuguma",
+    "url": "https://github.com/kuguma/hassio-jinja2config",
+    "maintainer": "Kuguma"
 }

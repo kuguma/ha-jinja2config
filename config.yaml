@@ -1,6 +1,6 @@
 name: "Jinja2Config"
 description: "Compile Home Assistant config files from Jinja2 templates"
-version: "1.0.4"
+version: "2.0.0"
 slug: "jinja2config"
 init: false
 map:
@@ -14,6 +14,18 @@ arch:
 options:
   log_level: debug
   config_dir: "/config"
+  variable_start_string: "{{"
+  variable_end_string: "}}"
+  block_start_string: "{%"
+  block_end_string: "%}"
+  comment_start_string: "{#"
+  comment_end_string: "#}"
 schema:
   log_level: list(trace|debug|info|notice|warning|error|fatal)
   config_dir: str
+  variable_start_string: str?
+  variable_end_string: str?
+  block_start_string: str?
+  block_end_string: str?
+  comment_start_string: str?
+  comment_end_string: str?

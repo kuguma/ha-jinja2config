@@ -2,7 +2,7 @@
 HASS_CONFIG_DIR=$(bashio::config 'config_dir')
 
 if ! type j2 > /dev/null 2>&1; then
-  echo "j2cli must be installed: pip install j2cli (https://pypi.org/project/j2cli/)"
+  echo "jinjanator must be installed: pip install jinjanator (https://github.com/kpfleming/jinjanator)"
   sleep 1
   exit 1
 fi
@@ -12,7 +12,7 @@ if ! type prettier > /dev/null 2>&1; then
   exit 1
 fi
 
-# Generate customization file for j2cli with custom delimiters
+# Generate customization file for jinjanator with custom delimiters
 CUSTOMIZE_FILE="/tmp/j2_customize.py"
 cat > "$CUSTOMIZE_FILE" << 'PYEOF'
 def j2_environment_params():

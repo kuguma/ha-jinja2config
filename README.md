@@ -57,14 +57,6 @@ With these settings, your templates would use the custom delimiters:
 /* This is a comment */
 ```
 
-## Breaking Changes in v2.0.0
-
-Version 2.0.0 migrates from `jinja-cli` to `jinjanator` (the modern successor to `j2cli`), which provides better support for custom delimiters and configuration options. The core functionality remains the same, but the underlying CLI tool has changed. Jinjanator supports Python 3.12+ and is actively maintained.
-
-## Changes in v2.0.1
-
-Version 2.0.1 ensures compatibility with Python 3.12+ by using jinjanator instead of the archived j2cli package. No functional changes from v2.0.0.
-
 ## Example
 
 I set up smart thermostats to control the underfloor heating for multiple rooms, requiring a certain amount of similar config per room. Using a template the amount of hand written yaml is greatly reduced, making it easier to manage and change as needed.

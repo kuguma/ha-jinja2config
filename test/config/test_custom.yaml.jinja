@@ -1,8 +1,0 @@
-/* This is a test template with custom delimiters */
-<% set test_var = "Custom Delimiters" %>
-test_custom:
-  message: (( test_var ))
-  list:
-    <% for i in range(3) %>
-    - custom_item_(( i ))
-    <% endfor %>

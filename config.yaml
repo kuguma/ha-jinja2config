@@ -14,12 +14,6 @@ arch:
 options:
   log_level: debug
   config_dir: "/config"
-  variable_start_string: "{{"
-  variable_end_string: "}}"
-  block_start_string: "{%"
-  block_end_string: "%}"
-  comment_start_string: "{#"
-  comment_end_string: "#}"
 schema:
   log_level: list(trace|debug|info|notice|warning|error|fatal)
   config_dir: str

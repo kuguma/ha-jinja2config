@@ -12,46 +12,6 @@ if ! type prettier > /dev/null 2>&1; then
   exit 1
 fi
 
-# Generate customization file for jinjanator with custom delimiters
-CUSTOMIZE_FILE="/tmp/j2_customize.py"
-cat > "$CUSTOMIZE_FILE" << 'PYEOF'
-def j2_environment_params():
-    """Return parameters for Jinja2 Environment"""
-    import os
-    params = {}
-
-    # Read delimiter settings from environment variables
-    var_start = os.environ.get('J2_VAR_START', '{{')
-    var_end = os.environ.get('J2_VAR_END', '}}')
-    block_start = os.environ.get('J2_BLOCK_START', '{%')
-    block_end = os.environ.get('J2_BLOCK_END', '%}')
-    comment_start = os.environ.get('J2_COMMENT_START', '{#')
-    comment_end = os.environ.get('J2_COMMENT_END', '#}')
-
-    if var_start:
-        params['variable_start_string'] = var_start
-    if var_end:
-        params['variable_end_string'] = var_end
-    if block_start:
-        params['block_start_string'] = block_start
-    if block_end:
-        params['block_end_string'] = block_end
-    if comment_start:
-        params['comment_start_string'] = comment_start
-    if comment_end:
-        params['comment_end_string'] = comment_end
-
-    return params
-PYEOF
-
-# Export delimiter settings as environment variables for the customization file
-export J2_VAR_START=$(bashio::config 'variable_start_string')
-export J2_VAR_END=$(bashio::config 'variable_end_string')
-export J2_BLOCK_START=$(bashio::config 'block_start_string')
-export J2_BLOCK_END=$(bashio::config 'block_end_string')
-export J2_COMMENT_START=$(bashio::config 'comment_start_string')
-export J2_COMMENT_END=$(bashio::config 'comment_end_string')
-
 remove() {
   OUTPUT_FILE="$1${2/.jinja}"
   echo "$1$2 deleted, removing: $OUTPUT_FILE"
@@ -66,8 +26,8 @@ compile() {
 
   echo "# DO NOT EDIT: Generated from: $2" > "$TEMP_OUTPUT_FILE"
   # Log any errors to an .errors.log file, delete if successful
-  # Use j2 with customize file and no data (defaults to environment variables)
-  if j2 --customize "$CUSTOMIZE_FILE" "$1$2" >> "$TEMP_OUTPUT_FILE" 2> "$ERROR_LOG_FILE"; then
+  # Use j2 with customize file and no data
+  if j2 --customize /etc/jinja2config/j2_customizations.py "$1$2" >> "$TEMP_OUTPUT_FILE" 2> "$ERROR_LOG_FILE"; then
     mv "$TEMP_OUTPUT_FILE" "$OUTPUT_FILE"
     (rm -f "$ERROR_LOG_FILE" || true)
     echo "Formatting $OUTPUT_FILE with Prettier..."
